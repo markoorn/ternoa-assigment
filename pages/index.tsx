@@ -72,7 +72,7 @@ const Home: NextPage = () => {
   return (
     <div>
       <Head>
-        <title>Ternoa Assignment</title>
+        <title>NFT Gallery</title>
       </Head>
 
       <Header
