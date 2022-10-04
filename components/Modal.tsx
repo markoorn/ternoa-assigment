@@ -32,15 +32,9 @@ export default function Modal({
   });
   const formOptions = { resolver: yupResolver(validationSchema) };
 
-  const defaultItem = {
-    title: '',
-    description: '',
-    imageUrl: '',
-    addedByAddress: '',
-  };
+  let [newOrUpdatedItem, setNewOrUpdatedItem] = useState<ListItem>();
 
-  const [newOrUpdatedItem, setNewOrUpdatedItem] =
-    useState<ListItem>(defaultItem);
+  let [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (item) {
@@ -52,7 +46,6 @@ export default function Modal({
 
   const handleClose = (e: any) => {
     if (e.target.id === 'wrapper') {
-      setNewOrUpdatedItem(defaultItem);
       onClose();
     }
   };
@@ -73,6 +66,7 @@ export default function Modal({
     formData.append('file', e.target.files[0]);
     formData.append('upload_preset', 'ternoa-upload');
 
+    setLoading(true);
     const result = await axios.post(
       'https://api.cloudinary.com/v1_1/silverstag/image/upload',
       formData,
@@ -81,6 +75,7 @@ export default function Modal({
     const itemCopy = { ...newOrUpdatedItem };
     itemCopy.imageUrl = result.data.secure_url;
     setNewOrUpdatedItem(itemCopy);
+    setLoading(false);
   }
 
   const onDeleteItem = async (e: any) => {
@@ -88,7 +83,6 @@ export default function Modal({
     const result = await axios.delete(`api/gallery/${newOrUpdatedItem.id}`);
     console.log(`successfully deleted item with id: ${result.data.id}`);
     onItemDeleted(result.data.id);
-    setNewOrUpdatedItem(defaultItem);
     onClose();
   };
 
@@ -110,7 +104,6 @@ export default function Modal({
       onItemAdded(result.data);
     }
 
-    setNewOrUpdatedItem(defaultItem);
     onClose();
   };
 
@@ -127,7 +120,8 @@ export default function Modal({
           >
             Image
           </label>
-          {newOrUpdatedItem?.imageUrl && (
+          {loading && <p>Uploading...</p>}
+          {!loading && newOrUpdatedItem?.imageUrl && (
             <div className="relative pb-64 w-full overflow-hidden mb-4">
               <Image
                 className="absolute inset-0 h-full w-full object-cover"
@@ -138,8 +132,12 @@ export default function Modal({
               />
             </div>
           )}
-
-          <input type="file" onChange={(e) => handleUpload(e)} />
+          <input
+            accept="image/*"
+            disabled={loading}
+            type="file"
+            onChange={(e) => handleUpload(e)}
+          />
         </div>
         <div className="w-full mb-5">
           <label
@@ -149,6 +147,7 @@ export default function Modal({
             Title
           </label>
           <input
+            disabled={loading}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:text-gray-600 focus:shadow-outline"
             value={newOrUpdatedItem?.title || ''}
             onChange={(e) => handleOnChange('title', e.target.value)}
@@ -164,6 +163,7 @@ export default function Modal({
             Description
           </label>
           <textarea
+            disabled={loading}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:text-gray-600 focus:shadow-outline h-32"
             value={newOrUpdatedItem?.description || ''}
             onChange={(e) => handleOnChange('description', e.target.value)}

@@ -15,6 +15,13 @@ const Home: NextPage = () => {
     undefined,
   );
 
+  const defaultItem = {
+    title: '',
+    description: '',
+    imageUrl: '',
+    addedByAddress: '',
+  };
+
   const fetchItems = async () => {
     const { data } = await axios.get('/api/gallery');
     setItems(data);
@@ -38,7 +45,7 @@ const Home: NextPage = () => {
 
   const onCreateItemClicked = () => {
     if (address) {
-      setSelectedItem(undefined);
+      setSelectedItem(defaultItem);
       setDisplayModal(true);
     }
   };
