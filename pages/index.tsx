@@ -36,19 +36,37 @@ const Home: NextPage = () => {
     }
   };
 
+  const onCreateItemClicked = () => {
+    if (address) {
+      setSelectedItem(undefined);
+      setDisplayModal(true);
+    }
+  };
+
+  const onItemDeleted = (id: number) => {
+    const index = items.findIndex((i: ListItem) => i.id === id);
+    if (index !== -1) {
+      const itemsCopy = [...items];
+      itemsCopy.splice(index, 1);
+      setItems(itemsCopy);
+    }
+  };
+
   const onItemUpdated = (item: ListItem) => {
     console.log('Item updated');
     const index = items.findIndex((i: ListItem) => i.id === item.id);
     if (index !== -1) {
-      items.splice(index, 1);
-      items.splice(index, 0, item);
-      setItems(items);
+      const itemsCopy = [...items];
+      itemsCopy.splice(index, 1);
+      itemsCopy.splice(index, 0, item);
+      setItems(itemsCopy);
     }
   };
 
   const onItemAdded = (item: ListItem) => {
-    items.push(item);
-    setItems(items);
+    const itemsCopy = [...items];
+    itemsCopy.push(item);
+    setItems(itemsCopy);
   };
 
   return (
@@ -57,7 +75,10 @@ const Home: NextPage = () => {
         <title>Ternoa Assignment</title>
       </Head>
 
-      <Header onWalletConnect={onWalletConnect} />
+      <Header
+        onWalletConnect={onWalletConnect}
+        onCreateItemClicked={onCreateItemClicked}
+      />
 
       <div className="antialiased bg-gray-200 text-gray-900 font-sans p-5">
         <div className="container mx-auto max-w-7xl min-h-screen">
@@ -73,11 +94,13 @@ const Home: NextPage = () => {
         </div>
       </div>
       <Modal
+        address={address}
         item={selectedItem}
         isVisible={displayModal}
         onClose={() => setDisplayModal(false)}
         onItemUpdated={onItemUpdated}
         onItemAdded={onItemAdded}
+        onItemDeleted={onItemDeleted}
       />
     </div>
   );

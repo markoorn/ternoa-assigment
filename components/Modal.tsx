@@ -1,35 +1,29 @@
 import axios from 'axios';
 import { motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
 import { ListItem } from '../types/ListItem';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import Image from 'next/image';
 
-// const {
-//   CLOUDINARY_API_KEY,
-//   CLOUDINARY_API_SECRET,
-//   CLOUDINARY_CLOUD_NAME,
-//   CLOUDINARY_FOLDER,
-// } = process.env;
-
-// const CLOUDINARY_URL = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload?folder=${CLOUDINARY_FOLDER}`;
-
 type Props = {
+  address: string;
   item?: ListItem;
   isVisible: boolean;
   onClose: () => void;
   onItemUpdated: (item: ListItem) => void;
   onItemAdded: (item: ListItem) => void;
+  onItemDeleted: (id: number) => void;
 };
 
 export default function Modal({
+  address,
   isVisible,
   onClose,
   item,
   onItemAdded,
   onItemUpdated,
+  onItemDeleted,
 }: Props) {
   const validationSchema = Yup.object().shape({
     title: Yup.string().required('Title is required'),
@@ -38,14 +32,15 @@ export default function Modal({
   });
   const formOptions = { resolver: yupResolver(validationSchema) };
 
-  const [newOrUpdatedItem, setNewOrUpdatedItem] = useState<
-    ListItem | undefined
-  >({
+  const defaultItem = {
     title: '',
     description: '',
     imageUrl: '',
     addedByAddress: '',
-  });
+  };
+
+  const [newOrUpdatedItem, setNewOrUpdatedItem] =
+    useState<ListItem>(defaultItem);
 
   useEffect(() => {
     if (item) {
@@ -57,7 +52,7 @@ export default function Modal({
 
   const handleClose = (e: any) => {
     if (e.target.id === 'wrapper') {
-      setNewOrUpdatedItem(item);
+      setNewOrUpdatedItem(defaultItem);
       onClose();
     }
   };
@@ -88,6 +83,15 @@ export default function Modal({
     setNewOrUpdatedItem(itemCopy);
   }
 
+  const onDeleteItem = async (e: any) => {
+    e.preventDefault();
+    const result = await axios.delete(`api/gallery/${newOrUpdatedItem.id}`);
+    console.log(`successfully deleted item with id: ${result.data.id}`);
+    onItemDeleted(result.data.id);
+    setNewOrUpdatedItem(defaultItem);
+    onClose();
+  };
+
   const onSubmit = async (e: any) => {
     e.preventDefault();
 
@@ -100,11 +104,13 @@ export default function Modal({
       console.log(`Sucessfully updated item with id: ${result.data.id}`);
       onItemUpdated(result.data);
     } else {
+      newOrUpdatedItem.addedByAddress = address;
       const result = await axios.post(`/api/gallery/create`, newOrUpdatedItem);
       console.log(`Successfully created item with id: ${result.data.id}`);
       onItemAdded(result.data);
     }
 
+    setNewOrUpdatedItem(defaultItem);
     onClose();
   };
 
@@ -122,7 +128,7 @@ export default function Modal({
             Image
           </label>
           {newOrUpdatedItem?.imageUrl && (
-            <div className="relative pb-48 w-full overflow-hidden mb-4">
+            <div className="relative pb-64 w-full overflow-hidden mb-4">
               <Image
                 className="absolute inset-0 h-full w-full object-cover"
                 src={newOrUpdatedItem.imageUrl}
@@ -165,9 +171,17 @@ export default function Modal({
           />
         </div>
         <div className="flex items-center justify-between">
-          <button className="block mt-5 bg-blue-400 w-full hover:bg-blue-500 text-white font-bold py-2 px-4 rounded focus:text-gray-600 focus:shadow-outline">
+          <button className="block mt-5 bg-blue-400 w-full mx-1 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded focus:text-gray-600 focus:shadow-outline">
             {newOrUpdatedItem?.id ? 'Save changes' : 'Add Item'}
           </button>
+          {newOrUpdatedItem?.id && (
+            <button
+              onClick={(e) => onDeleteItem(e)}
+              className="block mt-5 bg-red-400 w-full mx-1 hover:bg-red-500 text-white font-bold py-2 px-4 rounded focus:text-gray-600 focus:shadow-outline"
+            >
+              Delete Item
+            </button>
+          )}
         </div>
       </form>
     );
@@ -192,7 +206,7 @@ export default function Modal({
       onClick={handleClose}
     >
       <div className="fixed right-0 mx-auto flex flex-col bg-white h-full w-1/2  md:w-1/3 sm:w-full justify-center items-center">
-        {item && renderEditScreen()}
+        {renderEditScreen()}
       </div>
     </motion.div>
   );

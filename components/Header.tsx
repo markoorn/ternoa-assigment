@@ -3,13 +3,17 @@ import { motion } from 'framer-motion';
 
 type Props = {
   onWalletConnect: (address: string) => void;
+  onCreateItemClicked: () => void;
 };
 
-export default function Header({ onWalletConnect }: Props) {
+export default function Header({
+  onWalletConnect,
+  onCreateItemClicked,
+}: Props) {
   const [currentAccount, setCurrentAccount] = useState(null);
 
   const createItem = () => {
-    console.log('HERE');
+    onCreateItemClicked();
   };
   const connectWallet = async () => {
     try {
@@ -51,8 +55,16 @@ export default function Header({ onWalletConnect }: Props) {
           }}
           className="flex flex-row items-center"
         >
-          {currentAccount && <p>Your address is: {currentAccount}</p>}
-          {!currentAccount && <p>Connect your wallet to get started!</p>}
+          {currentAccount && (
+            <p className="text-xs text-gray-700 ">
+              Your address is: {currentAccount}
+            </p>
+          )}
+          {!currentAccount && (
+            <p className="text-xs text-gray-700 ">
+              Connect your wallet to get started!
+            </p>
+          )}
         </motion.div>
         <motion.div
           initial={{
@@ -71,7 +83,7 @@ export default function Header({ onWalletConnect }: Props) {
         >
           {!currentAccount && (
             <button
-              className="inline-block px-5 py-2.5 bg-gray-200 text-gray-700 font-medium text-xs uppercase rounded shadow-md hover:bg-gray-300 active:bg-gray-400"
+              className="block  bg-blue-400 w-full mx-1 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded focus:text-gray-600 focus:shadow-outline"
               onClick={connectWallet}
             >
               Connect Wallet
@@ -79,7 +91,7 @@ export default function Header({ onWalletConnect }: Props) {
           )}
           {currentAccount && (
             <button
-              className="inline-block px-5 py-2.5 bg-gray-200 text-gray-700 font-medium text-xs uppercase rounded shadow-md hover:bg-gray-300 active:bg-gray-400"
+              className="block  bg-blue-400 w-full mx-1 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded focus:text-gray-600 focus:shadow-outline"
               onClick={createItem}
             >
               Create item

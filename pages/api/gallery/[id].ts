@@ -6,7 +6,7 @@ export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<ListItem>,
 ) {
-  let getGalleryItemById = async (id: number) => {
+  const getGalleryItemById = async (id: number) => {
     const result = await prisma.gallery.findFirstOrThrow({
       where: {
         id,
@@ -16,7 +16,7 @@ export default function handler(
     return res.status(200).json(result);
   };
 
-  let updateGalleryItem = async (id: number, item: ListItem) => {
+  const updateGalleryItem = async (id: number, item: ListItem) => {
     const result = await prisma.gallery.update({
       where: {
         id,
@@ -31,7 +31,7 @@ export default function handler(
     return res.status(200).json(result);
   };
 
-  let deleteGalleryItemById = async (id: number) => {
+  const deleteGalleryItemById = async (id: number) => {
     const result = await prisma.gallery.delete({
       where: {
         id,
@@ -40,8 +40,6 @@ export default function handler(
 
     return res.status(202).json(result);
   };
-
-  // console.log('Received request: ', req);
 
   switch (req.method) {
     case 'GET':

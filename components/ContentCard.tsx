@@ -30,7 +30,7 @@ export default function ContentCard({ item, onClick }: Props) {
         className="c-card block bg-white shadow-md hover:shadow-xl rounded-lg overflow-hidden z-10"
         onClick={onClick}
       >
-        <div className="relative pb-48 overflow-hidden">
+        <div className="relative pb-64 overflow-hidden">
           <Image
             className="absolute inset-0 h-full w-full object-cover"
             src={item.imageUrl}
