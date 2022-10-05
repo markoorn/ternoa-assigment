@@ -29,9 +29,9 @@ export default function Modal({
   onItemUpdated,
   onItemDeleted,
 }: Props) {
-  let [newOrUpdatedItem, setNewOrUpdatedItem] = useState<ListItem>();
-  let [imagePreview, setImagePreview] = useState('');
-  let [loading, setLoading] = useState(false);
+  const [newOrUpdatedItem, setNewOrUpdatedItem] = useState<ListItem>();
+  const [imagePreview, setImagePreview] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const validationSchema = Yup.object().shape({
     title: Yup.string().required('Title is required'),

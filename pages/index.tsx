@@ -9,9 +9,9 @@ import { ListItem } from '../types/ListItem';
 
 const Home: NextPage = () => {
   const [displayModal, setDisplayModal] = useState(false);
-  let [address, setAddress] = useState('');
-  let [items, setItems] = useState<ListItem[]>([]);
-  let [selectedItem, setSelectedItem] = useState<ListItem | undefined>(
+  const [address, setAddress] = useState('');
+  const [items, setItems] = useState<ListItem[]>([]);
+  const [selectedItem, setSelectedItem] = useState<ListItem | undefined>(
     undefined,
   );
 

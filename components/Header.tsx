@@ -11,9 +11,6 @@ export default function Header({
 }: Props) {
   const [currentAccount, setCurrentAccount] = useState(null);
 
-  const createItem = () => {
-    onCreateItemClicked();
-  };
   const connectWallet = async () => {
     try {
       const { ethereum } = window as any;
@@ -27,7 +24,6 @@ export default function Header({
         method: 'eth_requestAccounts',
       });
 
-      console.log('Connected', accounts[0]);
       setCurrentAccount(accounts[0]);
       onWalletConnect(accounts[0]);
     } catch (error) {
@@ -62,7 +58,7 @@ export default function Header({
           {currentAccount && (
             <button
               className="block  bg-blue-400 w-full mx-1 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded focus:text-gray-600 focus:shadow-outline"
-              onClick={createItem}
+              onClick={() => onCreateItemClicked}
             >
               Create item
             </button>
