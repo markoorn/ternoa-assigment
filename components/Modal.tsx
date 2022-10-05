@@ -69,7 +69,6 @@ export default function Modal({
   };
 
   const uploadImage = async (files: FileList) => {
-    console.log('Uploading image from files: ', files[0]);
     const formData = new FormData();
     formData.append('file', files[0]);
     formData.append('upload_preset', 'ternoa-upload');
@@ -82,8 +81,9 @@ export default function Modal({
   };
 
   const handleImageChange = (e: any) => {
-    setImagePreview(URL.createObjectURL(e.target.files[0]));
-    console.log(URL.createObjectURL(e.target.files[0]));
+    if (e.target?.files && e.target.files.length > 0) {
+      setImagePreview(URL.createObjectURL(e.target.files[0]));
+    }
   };
 
   const onDeleteItem = async (e: any) => {
