@@ -4,6 +4,8 @@ import React, { useEffect, useState } from 'react';
 import { ListItem } from '../types/ListItem';
 import Image from 'next/image';
 import { useForm } from 'react-hook-form';
+import * as Yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 type Props = {
   address: string;
@@ -24,16 +26,21 @@ export default function Modal({
   onItemUpdated,
   onItemDeleted,
 }: Props) {
+  let [newOrUpdatedItem, setNewOrUpdatedItem] = useState<ListItem>();
+  let [imagePreview, setImagePreview] = useState('');
+  let [loading, setLoading] = useState(false);
+
+  const validationSchema = Yup.object().shape({
+    title: Yup.string().required('Title is required'),
+    description: Yup.string().required('Description is required'),
+  });
+
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm();
-
-  let [newOrUpdatedItem, setNewOrUpdatedItem] = useState<ListItem>();
-  let [imagePreview, setImagePreview] = useState('');
-  let [loading, setLoading] = useState(false);
+  } = useForm({ resolver: yupResolver(validationSchema) });
 
   useEffect(() => {
     if (item) {
@@ -48,11 +55,6 @@ export default function Modal({
 
   const handleClose = (e: any) => {
     if (e.target.id === 'wrapper') {
-      reset({
-        title: '',
-        description: '',
-        imageUrl: '',
-      });
       setImagePreview('');
       onClose();
     }
@@ -91,9 +93,12 @@ export default function Modal({
     itemCopy.title = data.title;
     itemCopy.description = data.description;
     setLoading(true);
-    const imageUrl = await uploadImage(data.image);
 
-    itemCopy.imageUrl = imageUrl;
+    if (data.image && data.image.length > 0) {
+      const imageUrl = await uploadImage(data.image);
+      itemCopy.imageUrl = imageUrl;
+    }
+
     if (itemCopy?.id) {
       const result = await axios.put(`/api/gallery/${itemCopy?.id}`, itemCopy);
       console.log(`Sucessfully updated item with id: ${result.data.id}`);
@@ -125,8 +130,9 @@ export default function Modal({
           </label>
           <div className="relative h-64 w-full overflow-hidden mb-4 border border-dashed border-gray-500">
             <input
+              required={!newOrUpdatedItem?.id}
               disabled={loading}
-              {...register('image', { required: 'Please select an image' })}
+              {...register('image')}
               onChange={(e) => handleImageChange(e)}
               accept="image/*"
               type="file"
@@ -165,8 +171,9 @@ export default function Modal({
             Title
           </label>
           <input
+            required
             disabled={loading}
-            {...register('title', { required: 'Please enter a title' })}
+            {...register('title')}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:text-gray-600 focus:shadow-outline"
             type="text"
             placeholder="Enter title"
@@ -185,8 +192,9 @@ export default function Modal({
             Description
           </label>
           <textarea
+            required
             disabled={loading}
-            {...register('description', { required: true })}
+            {...register('description')}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:text-gray-600 focus:shadow-outline h-32"
             placeholder="Enter description"
           />
@@ -207,7 +215,7 @@ export default function Modal({
             <button
               disabled={loading}
               onClick={(e) => onDeleteItem(e)}
-              className="block mt-5 bg-red-400 w-full mx-1 hover:bg-red-500 text-white font-bold py-2 px-4 rounded focus:text-gray-600 focus:shadow-outline"
+              className="block mt-5 disabled:bg-gray-400 bg-red-400 w-full mx-1 hover:bg-red-500 text-white font-bold py-2 px-4 rounded focus:text-gray-600 focus:shadow-outline"
             >
               Delete Item
             </button>
