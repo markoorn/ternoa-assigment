@@ -32,6 +32,7 @@ export default function ContentCard({ item, onClick }: Props) {
       >
         <div className="relative pb-64 overflow-hidden">
           <Image
+            priority
             className="absolute inset-0 h-full w-full object-cover"
             src={item.imageUrl}
             objectFit={'cover'}

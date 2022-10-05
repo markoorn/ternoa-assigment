@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
 
 type Props = {
   onWalletConnect: (address: string) => void;
@@ -39,22 +38,7 @@ export default function Header({
   return (
     <div className="bg-slate-300 sticky top-0 z-20 ">
       <header className="p-3 flex items-starts justify-between max-w-7xl mx-auto  xl:items-center ">
-        <motion.div
-          initial={{
-            x: -500,
-            opacity: 0,
-            scale: 0.5,
-          }}
-          animate={{
-            x: 0,
-            opacity: 1,
-            scale: 1,
-          }}
-          transition={{
-            duration: 1.5,
-          }}
-          className="flex flex-row items-center"
-        >
+        <div className="flex flex-row items-center">
           {currentAccount && (
             <p className="text-xs text-gray-700 ">
               Your address is: {currentAccount}
@@ -65,22 +49,8 @@ export default function Header({
               Connect your wallet to get started!
             </p>
           )}
-        </motion.div>
-        <motion.div
-          initial={{
-            x: 500,
-            opacity: 0,
-            scale: 0.5,
-          }}
-          animate={{
-            x: 0,
-            opacity: 1,
-            scale: 1,
-          }}
-          transition={{
-            duration: 1.5,
-          }}
-        >
+        </div>
+        <div>
           {!currentAccount && (
             <button
               className="block  bg-blue-400 w-full mx-1 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded focus:text-gray-600 focus:shadow-outline"
@@ -97,7 +67,7 @@ export default function Header({
               Create item
             </button>
           )}
-        </motion.div>
+        </div>
       </header>
     </div>
   );

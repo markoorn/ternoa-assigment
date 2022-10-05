@@ -60,7 +60,6 @@ const Home: NextPage = () => {
   };
 
   const onItemUpdated = (item: ListItem) => {
-    console.log('Item updated');
     const index = items.findIndex((i: ListItem) => i.id === item.id);
     if (index !== -1) {
       const itemsCopy = [...items];

@@ -11,6 +11,6 @@ model gallery {
   id             Int    @id @default(autoincrement()) @db.UnsignedInt
   title          String @db.VarChar(50)
   description    String @db.VarChar(500)
-  imageUrl       String @db.VarChar(100)
+  imageUrl       String @db.VarChar(500)
   addedByAddress String @db.VarChar(100)
 }

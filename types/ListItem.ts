@@ -1,5 +1,5 @@
 export interface ListItem {
-  id?: number;
+  id?: number | undefined;
   imageUrl: string;
   title: string;
   description: string;
