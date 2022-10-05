@@ -58,9 +58,14 @@ export default function Modal({
 
   const handleClose = (e: any) => {
     if (e.target.id === 'wrapper') {
-      setImagePreview('');
-      onClose();
+      cleanupAndClose();
     }
+  };
+
+  const cleanupAndClose = () => {
+    setLoading(false);
+    setImagePreview('');
+    onClose();
   };
 
   const uploadImage = async (files: FileList) => {
@@ -88,7 +93,7 @@ export default function Modal({
       console.log(`successfully deleted item with id: ${result.data.id}`);
       onItemDeleted(result.data.id);
     }
-    onClose();
+    cleanupAndClose();
   };
 
   const onSubmit = async (data: any) => {
@@ -114,8 +119,7 @@ export default function Modal({
     }
 
     setNewOrUpdatedItem(itemCopy);
-    setLoading(false);
-    onClose();
+    cleanupAndClose();
   };
 
   const renderForm = () => {
