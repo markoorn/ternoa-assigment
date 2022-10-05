@@ -19,7 +19,7 @@ export default function Header({
       const { ethereum } = window as any;
 
       if (!ethereum) {
-        alert('Get MetaMask!');
+        alert('Please install the MetaMask plugin to connect your wallet');
         return;
       }
 

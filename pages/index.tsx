@@ -35,7 +35,7 @@ const Home: NextPage = () => {
     setAddress(address);
   };
 
-  const selectItem = (id: number) => {
+  const selectItem = (id: number | undefined) => {
     if (address) {
       const selectedItem = items.find((item) => item.id === id);
       setSelectedItem(selectedItem);

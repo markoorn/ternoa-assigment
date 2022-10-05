@@ -8,6 +8,9 @@ type Props = {
   item: ListItem;
 };
 
+const PLACEHOLDER_IMAGE =
+  'https://res.cloudinary.com/silverstag/image/upload/v1664966534/ternoa/placeholder_eukgmf.png';
+
 export default function ContentCard({ item, onClick }: Props) {
   return (
     <motion.div
@@ -34,7 +37,7 @@ export default function ContentCard({ item, onClick }: Props) {
           <Image
             priority
             className="absolute inset-0 h-full w-full object-cover"
-            src={item.imageUrl}
+            src={item.imageUrl || PLACEHOLDER_IMAGE}
             objectFit={'cover'}
             layout={'fill'}
             alt=""

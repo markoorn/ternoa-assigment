@@ -17,6 +17,9 @@ type Props = {
   onItemDeleted: (id: number) => void;
 };
 
+const PLACEHOLDER_IMAGE =
+  'https://res.cloudinary.com/silverstag/image/upload/v1664966534/ternoa/placeholder_eukgmf.png';
+
 export default function Modal({
   address,
   isVisible,
@@ -60,7 +63,7 @@ export default function Modal({
     }
   };
 
-  async function uploadImage(files: FileList) {
+  const uploadImage = async (files: FileList) => {
     console.log('Uploading image from files: ', files[0]);
     const formData = new FormData();
     formData.append('file', files[0]);
@@ -71,7 +74,7 @@ export default function Modal({
       formData,
     );
     return result.data.secure_url;
-  }
+  };
 
   const handleImageChange = (e: any) => {
     setImagePreview(URL.createObjectURL(e.target.files[0]));
@@ -155,7 +158,11 @@ export default function Modal({
             {(imagePreview || newOrUpdatedItem?.imageUrl) && (
               <Image
                 className="text-center p-10 absolute top-0 right-0 left-0 m-auto"
-                src={imagePreview || newOrUpdatedItem?.imageUrl}
+                src={
+                  imagePreview ||
+                  newOrUpdatedItem?.imageUrl ||
+                  PLACEHOLDER_IMAGE
+                }
                 layout={'fill'}
                 objectFit={'cover'}
                 alt=""
