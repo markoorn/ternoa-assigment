@@ -58,7 +58,7 @@ export default function Header({
           {currentAccount && (
             <button
               className="block  bg-blue-400 w-full mx-1 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded focus:text-gray-600 focus:shadow-outline"
-              onClick={() => onCreateItemClicked}
+              onClick={() => onCreateItemClicked()}
             >
               Create item
             </button>
