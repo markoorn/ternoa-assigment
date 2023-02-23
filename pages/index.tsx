@@ -6,8 +6,26 @@ import ContentCard from '../components/ContentCard';
 import Header from '../components/Header';
 import Modal from '../components/Modal';
 import { ListItem } from '../types/ListItem';
+import {ChainvineClient, storeReferrer} from '@chainvine/sdk/lib';
 
 const Home: NextPage = () => {
+
+  // useEffect(() => {
+  //   const fetch = async () => {
+  //     const client = new ChainvineClient({
+  //       apiKey: 'afc5901f-74eb-4c35-8675-ca215107c72b',
+  //       testMode: false, // optional, defaults to false. When set to true, the SDK will use the test API endpoint
+  //     });
+  //
+  //     console.log(client);
+  //       const wallet = await client.getReferralUrl('0xCAc9a84e12Ae1eFcA12601771dd61b5EAcb2d8B2');
+  //
+  //     console.log("Wallet info: ", wallet);
+  //   } //the user's ChainVine id
+  //
+  //   fetch();
+  // }, [])
+
   const [displayModal, setDisplayModal] = useState(false);
   const [address, setAddress] = useState('');
   const [items, setItems] = useState<ListItem[]>([]);
@@ -22,13 +40,13 @@ const Home: NextPage = () => {
     addedByAddress: '',
   };
 
-  const fetchItems = async () => {
-    const { data } = await axios.get('/api/gallery');
-    setItems(data);
-  };
-  useEffect(() => {
-    fetchItems();
-  }, []);
+  // const fetchItems = async () => {
+  //   const { data } = await axios.get('/api/gallery');
+  //   setItems(data);
+  // };
+  // useEffect(() => {
+  //   fetchItems();
+  // }, []);
 
   const onWalletConnect = (address: string) => {
     console.log('Wallet connected: ', address);

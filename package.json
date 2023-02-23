@@ -11,6 +11,7 @@
     "format:fix": "prettier --write --ignore-path .gitignore ."
   },
   "dependencies": {
+    "@chainvine/sdk": "^1.0.14",
     "@hookform/resolvers": "^2.0.0",
     "@prisma/client": "4.4.0",
     "axios": "^0.27.2",
