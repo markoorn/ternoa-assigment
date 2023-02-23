@@ -12,7 +12,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     <Script strategy="lazyOnload" dangerouslySetInnerHTML={{
       __html:  `window.referralJS = ((window.referralJS !== null && window.referralJS !== undefined) ? window.referralJS : {});
                 var firstName = 'Mark';
-                var email = 'mark@referred.xyz';
+                var email = 'mark@referred2.xyz';
                 var externalIdentifier = '123456789';
                 var amount = 100;
                 
@@ -20,9 +20,9 @@ function MyApp({ Component, pageProps }: AppProps) {
                     debug: "false",
                     parameters: {
                         firstName: "Mark",
-                        email: "mark@referred.xyz",
+                        email: "mark@referred2.xyz",
                         externalIdentifier: "marktest1223",
-                        amount: "100"
+                        amount: 100
                     }
                 };`
     }}  />
