@@ -1,7 +1,6 @@
 import {NextPage} from "next";
 import Home from "../index";
 import Script from "next/script";
-import {Head} from "next/head";
 
 const Confirm: NextPage = () => {
     return (
